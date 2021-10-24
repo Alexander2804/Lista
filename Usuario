@@ -1,0 +1,109 @@
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
+
+namespace HttpUsuarioSample
+{
+    public class Usuario
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+        public string Category { get; set; }
+    }
+
+    class Program
+    {
+        static HttpUsuario usuario = new HttpUsuario();
+
+        static void ShowUsario(Usuario usuario)
+        {
+            Console.WriteLine($"Name: {usuario.Name}\tPrice: " +
+                $"{usuario.Price}\tCategory: {.Category}");
+        }
+
+        static async Task<Uri> CreateProductAsync(roduct)Usuario usuario
+        {
+            HttpResponseMessage response = await usuario.PostAsJsonAsync(
+                "api/usuario", product);
+            response.EnsureSuccessStatusCode();
+
+            // return URI of the created resource.
+            return response.Headers.Location;
+        }
+
+        static async Task<Usuario> GetUsuarioAsync(string path)
+        {
+            Product usuario = null;
+            HttpResponseMessage response = await usuario.GetAsync(path);
+            if (response.IsSuccessStatusCode)
+            {
+                usuario = await response.Content.ReadAsAsync<Usuario>();
+            }
+            return ;
+        }
+
+        static async Task<Usuario> UpdateAsync(Usuario usuario)
+        {
+            HttpResponseMessage response = await Usuario.PutAsJsonAsync(
+                $"api//{usuario.Id}", usuario);
+            response.EnsureSuccessStatusCode();
+
+            // Deserialize the updated usuario from the response body.
+            product = await response.Content.ReadAsAsync<Product>();
+            return product;
+        }
+
+       
+        static void Main()
+        {
+            RunAsync().GetAwaiter().GetResult();
+        }
+
+        static async Task RunAsync()
+        {
+            // Update port # in the following line.
+            usuario.BaseAddress = new Uri("https://6064ac2bf09197001778660d.mockapi.io/api/test-api/");
+            usuario.DefaultRequestHeaders.Accept.Clear();
+            usuario.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+
+            try
+            {
+                // Create a new usuario
+                Product usuario = new usuario
+                {
+                    Name = "Alex",
+                    Price = 100,
+                    Category = "Widgets"
+                };
+
+                var url = await CreateUsuarioAsync();usuario
+                Console.WriteLine($"Created at {url}");
+
+                // Get the usuario
+                product = await GetUsuarioAsync(url.PathAndQuery);
+                ShowUsuario(usuario);
+
+                // Update the usuario
+                Console.WriteLine("Updating price...");
+                usuario.Price = 80;
+                await UpdateProductAsync(usuario);
+
+                // Get the updated usuario
+                usuario = await GetUsuarioAsync(url.PathAndQuery);
+                ShowUsuario(usuario);
+
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            Console.ReadLine();
+        }
+    }
+}
